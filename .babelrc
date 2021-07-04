@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "component",
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-chalk"
+      }
+    ]
+  ]
+}
+//可以只引入 element-ui 需要的组件，以达到减小项目体积的目的  然后在 main.js 中引入使用
