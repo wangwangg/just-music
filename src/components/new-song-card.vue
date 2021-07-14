@@ -1,26 +1,26 @@
 <template>
   <div class="new-song-card">
     <div class="order-wrap">
-      <span class="order">{{order}}</span>
+      <span class="order">0{{ order }}</span>
     </div>
     <div class="img-wrap">
       <img :src="img" />
+      <div class="play-icon-wrap">
+        <Icon class="play-icon" type="play" />
+      </div>
     </div>
     <div class="song-content">
-      <p class="song-name">{{name}}</p>
-      <p class="singer">{{artistsText}}</p>
+      <p class="song-name">{{ name }}</p>
+      <p class="singer">{{ artistsText }}</p>
     </div>
   </div>
 </template>
 
 <script>
+// 新歌页面组件
 export default {
-  props: ["order", "name", "img", "artists"],
-  computed: {
-    artistsText() {
-      return (this.artists || []).map(({ name }) => name).join("/");
-    }
-  }
+  props: ["order", "name", "img", "artistsText"],
+
 };
 </script>
 
@@ -39,8 +39,9 @@ export default {
   }
 
   .img-wrap {
-    width: 36px;
-    height: 36px;
+    position: relative;
+    width: 60px;
+    height: 60px;
     margin-right: 8px;
     img {
       width: 100%;
@@ -57,7 +58,21 @@ export default {
       color: $font-color-white;
     }
 
-    .singer {
+    .play-icon-wrap {
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.5);
+      .play-icon {
+        color: $theme-color;
+      }
     }
   }
 }

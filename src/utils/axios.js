@@ -3,9 +3,10 @@ import { Loading } from 'element-ui'
 
 let loading
 let loadingCount = 0
+export let request
 export default {
   install(Vue) {
-    const request = axios.create({
+    request = axios.create({
       // 创建一个axios实例
       baseURL: '/api',
     })

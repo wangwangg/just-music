@@ -12,11 +12,11 @@ export default {
       default: () => []
     }
   },
-  mounted() {
+  mounted () {
     this.mixinStriped();
   },
   methods: {
-    mixinStriped() {
+    mixinStriped () {
       if (this.$slots.default && this.$slots.default.length) {
         this.$nextTick(() => {
           this.$slots.default.forEach((vnode, index) => {
@@ -30,7 +30,7 @@ export default {
   },
   watch: {
     source: {
-      handler() {
+      handler () {
         this.mixinStriped();
       },
       deep: true
@@ -40,11 +40,13 @@ export default {
 </script>
 
 <style lang="scss">
-.stripe-shallow {
-  background: #1a1c20;
+.stripe-row:hover {
+  background: #2e2e2e;
 }
-
+.stripe-shallow {
+  background: #2e2e2e;
+}
 .stripe-deep {
-  background: #16181c;
+  background: $body-bgcolor;
 }
 </style>
