@@ -16,7 +16,7 @@ export default {
     const { listId } = this.$route.params;
     const { playlist } = await getListDetail({ id: listId });
     this.playlist = playlist;
-    this.songlist = await this.genSonglist(playlist);
+    this.genSonglist(playlist);
   },
   data() {
     return {

@@ -2,15 +2,17 @@
   <div id="app">
     <Layout />
     <Miniplayer />
+    <Playlist />
   </div>
 </template>
 
 <script>
-import Layout from '@/layout'
-import Miniplayer from '@/components/mini-player'
+import Layout from "@/layout";
+import Miniplayer from "@/components/mini-player";
+import Playlist from "@/components/playlist";
 export default {
-  components: { Layout, Miniplayer }
-}
+  components: { Layout, Miniplayer, Playlist },
+};
 </script>
 
 <style lang='scss'>

@@ -1,35 +1,49 @@
 <template>
   <div class="mini-player">
     <!-- 歌曲内容 -->
-    <div v-if="currentSong.id" class="song">
-      <div class="img-wrap">
-        <img :src="currentSong.img" />
-      </div>
-      <div class="content">
-        <div class="top">
-          <p class="name">{{ currentSong.name }}</p>
-          <p class="split">-</p>
-          <p class="artists">{{ currentSong.artistsText }}</p>
+    <div class="song">
+      <template v-if="hasCurrentSong">
+        <div class="img-wrap">
+          <img :src="currentSong.img" />
         </div>
-        <div class="time">
-          <span class="played-time">{{ formatTime(currentTime) }}</span>
-          <span class="split">/</span>
-          <span class="total-time">{{
-            formatTime(currentSong.duration / 1000)
-          }}</span>
+        <div class="content">
+          <div class="top">
+            <p class="name">{{ currentSong.name }}</p>
+            <p class="split">-</p>
+            <p class="artists">{{ currentSong.artistsText }}</p>
+          </div>
+          <div class="time">
+            <span class="played-time">{{ formatTime(currentTime) }}</span>
+            <span class="split">/</span>
+            <span class="total-time">{{
+              formatTime(currentSong.duration / 1000)
+            }}</span>
+          </div>
         </div>
-      </div>
+      </template>
     </div>
     <!-- 控制台 -->
     <div class="control">
+      <Icon class="icon" type="prev" :size="24" @click.native="prev" />
       <div @click="togglePlaying" class="play-icon">
-        <Icon :type="playIcon" :size="20" />
+        <Icon :type="playIcon" :size="24" />
       </div>
+
+      <Icon class="icon" type="next" :size="24" @click.native="next" />
     </div>
 
-    <div></div>
-    <div class="progress-bar-wrap">
-      <ProgressBar />
+    <div class="mode">
+      <Icon
+        class="icon"
+        type="playlist"
+        :size="18"
+        @click.native="togglePlaylistShow"
+      />
+      <volume @volumeChange="onVolumeChange" />
+    </div>
+
+    <div v-if="hasCurrentSong" class="progress-bar-wrap">
+      <ProgressBar :percent="playedPercent" @percentChange="onProgressChange" />
     </div>
     <audio
       ref="audio"
@@ -42,88 +56,119 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { mapState, mapMutations } from 'vuex'
-import ProgressBar from '@/base/progress-bar'  //进度条
-import { formatTime } from '@/utils/common'
+import { mapState, mapMutations, mapGetters, mapActions } from "vuex";
+import ProgressBar from "@/base/progress-bar";
+import volume from "@/base/volume";
+import { formatTime } from "@/utils/common";
 export default {
-  created () {
-    this.formatTime = formatTime
+  created() {
+    this.formatTime = formatTime;
   },
-  data () {
+  data() {
     return {
       songReady: false,
       currentTime: 0,
-    }
-  },
-  components: {
-    ProgressBar
+    };
   },
   methods: {
-    togglePlaying () {
+    togglePlaying() {
       if (!this.currentSong) {
-        return
+        return;
       }
-      this.setPlayingState(!this.playing)
+      this.setPlayingState(!this.playing);
     },
-    ready () {
-      this.songReady = true
+    ready() {
+      this.songReady = true;
     },
-    play () {
-      this.audio.play()
+    play() {
+      if (this.songReady) {
+        this.audio.play();
+      }
     },
-    pause () {
-      this.audio.pause()
+    pause() {
+      this.audio.pause();
     },
-    updateTime (e) {
-      const time = e.target.currentTime
-      this.currentTime = time
+    updateTime(e) {
+      const time = e.target.currentTime;
+      this.currentTime = time;
     },
-    end () {
-      this.audio.currentTime = 0
+    prev() {
+      if (this.songReady) {
+        this.startSong(this.prevSong);
+      }
     },
-    ...mapMutations(['setPlayingState'])
+    next() {
+      if (this.songReady) {
+        this.startSong(this.nextSong);
+      }
+    },
+    end() {
+      this.next();
+    },
+    onProgressChange(percent) {
+      this.audio.currentTime = this.currentSong.durationSecond * percent;
+    },
+    onVolumeChange(percent) {
+      this.audio.volume = percent;
+    },
+    togglePlaylistShow() {
+      this.setPlaylistShow(!this.isPlaylistShow);
+    },
+    ...mapMutations(["setPlayingState", "setPlaylistShow"]),
+    ...mapActions(["startSong"]),
   },
   watch: {
-    currentSong (newSong, oldSong) {
+    currentSong(newSong, oldSong) {
       if (!newSong.id) {
-        return
+        return;
       }
       if (oldSong) {
         if (newSong.id === oldSong.id) {
-          return
+          return;
         }
       }
       if (this.timer) {
-        clearTimeout(this.timer)
+        clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
-        this.play()
+        this.play();
       }, 1000);
     },
-    playing (newPlaying) {
+    playing(newPlaying) {
       this.$nextTick(() => {
-        newPlaying ? this.audio.play() : this.audio.pause()
-      })
-    }
+        newPlaying ? this.audio.play() : this.audio.pause();
+      });
+    },
   },
   computed: {
-    playIcon () {
-      return this.playing ? 'pause' : 'play'
+    hasCurrentSong() {
+      return !!this.currentSong.id;
     },
-    audio () {
-      return this.$refs.audio
+    playIcon() {
+      return this.playing ? "pause" : "play";
     },
-    ...mapState(['currentSong', 'playing'])
+    audio() {
+      return this.$refs.audio;
+    },
+    // 播放的进度百分比
+    playedPercent() {
+      const { durationSecond } = this.currentSong;
+      return Math.min(this.currentTime / durationSecond, 1);
+    },
+    ...mapState(["currentSong", "playing", "isPlaylistShow"]),
+    ...mapGetters(["prevSong", "nextSong"]),
   },
-
-}
+  components: {
+    ProgressBar,
+    volume,
+  },
+};
 </script>
-
 <style lang="scss" scoped>
 .mini-player {
   position: relative;
   position: fixed;
-  z-index: 1;
+  z-index: $mini-player-z-index;
   bottom: 0;
   left: 0;
   right: 0;
@@ -131,6 +176,7 @@ export default {
   justify-content: space-between;
   height: $mini-player-height;
   padding: 8px;
+  padding-right: 24px;
   background: $body-bgcolor;
   .song {
     display: flex;
@@ -178,25 +224,33 @@ export default {
     left: 50%;
     transform: translateX(-50%);
     width: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include flex-center();
     .play-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include flex-center();
       width: 45px;
       height: 45px;
+      margin: 0 16px;
       border-radius: 50%;
       background: $theme-color;
       cursor: pointer;
     }
+    .icon {
+      color: $theme-color;
+    }
+  }
+  .mode {
+    display: flex;
+    align-items: center;
   }
   .progress-bar-wrap {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: $mini-player-height - 14px;
+    top: -14px;
   }
+}
+.icon {
+  color: $font-color;
+  cursor: pointer;
 }
 </style>
