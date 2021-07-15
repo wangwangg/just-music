@@ -17,7 +17,7 @@
         <div v-if="dataSource.length" class="song-table-wrap">
           <SongTable
             :songs="dataSource"
-            :hideColumns="['index', 'albumName']"
+            :hideColumns="['index', 'img', 'albumName']"
             :showPromptOnPlay="false"
           />
         </div>
@@ -29,7 +29,6 @@
 
 <script type="text/ecmascript-6">
 import { mapState, mapMutations, mapActions } from "vuex";
-import Tabs from "@/base/tabs";
 import LeaveHide from "@/base/leave-hide";
 import SongTable from "./song-table";
 export default {
@@ -80,7 +79,6 @@ export default {
   components: {
     SongTable,
     LeaveHide,
-    Tabs,
   },
 };
 </script>

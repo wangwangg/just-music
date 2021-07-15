@@ -44,10 +44,7 @@ export default {
       height: 100%;
     }
     .play-icon {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
+      @include abs-center;
     }
   }
   .song-content {

@@ -1,11 +1,16 @@
 import { Input, Carousel, CarouselItem, Table, TableColumn, Popover, Pagination } from 'element-ui'
 import * as commonUtils from './common'
+
 import Icon from '@/base/icon'
 import NButton from '@/base/button'
+import Tabs from '@/base/tabs'
+
 export default {
   install(Vue) {
     Vue.component('Icon', Icon) // 全局注册icon组件
     Vue.component('NButton', NButton)
+    Vue.component('Tabs', Tabs)
+
     Vue.prototype.$ELEMENT = { size: 'small' };
     Vue.prototype.$utils = commonUtils
 

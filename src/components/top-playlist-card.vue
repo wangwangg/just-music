@@ -64,7 +64,7 @@ export default {
       .desc {
         @include text-ellipsis-multi(5);
         font-size: $font-size-sm;
-        color: #708b90;
+        color: $font-color-transparent;
       }
     }
   }
