@@ -1,5 +1,6 @@
 <template>
-  <div class="mini-player">
+  <div id="mini-player" class="mini-player">
+    <!-- 歌曲内容 -->
     <div class="song">
       <template v-if="hasCurrentSong">
         <div class="img-wrap">
@@ -32,12 +33,22 @@
     </div>
 
     <div class="mode">
-      <Icon
-        class="icon"
-        type="playlist"
-        :size="18"
-        @click.native="togglePlaylistShow"
-      />
+      <el-popover
+        placement="top"
+        width="160"
+        :value="isPlaylistPromptShow"
+        trigger="manual"
+      >
+        <p>已加入歌单</p>
+        <Icon
+          slot="reference"
+          class="icon"
+          type="playlist"
+          :size="18"
+          @click.native="togglePlaylistShow"
+        />
+      </el-popover>
+
       <!-- 音量组件 -->
       <volume @volumeChange="onVolumeChange" />
     </div>
@@ -48,7 +59,7 @@
     <audio
       ref="audio"
       :src="currentSong.url"
-      @play="ready"
+      @canplay="ready"
       @ended="end"
       @timeupdate="updateTime"
     ></audio>
@@ -86,7 +97,9 @@ export default {
     },
     play() {
       if (this.songReady) {
-        this.audio.play();
+        this.audio.play().catch(() => {
+          this.setPlayingState(false);
+        });
       }
     },
     pause() {
@@ -128,19 +141,26 @@ export default {
       }
       if (oldSong) {
         if (newSong.id === oldSong.id) {
-          return;
+          this.currentTime = 0;
+          this.audio.currentTime = 0;
+          this.play();
         }
       }
+      this.songReady = false;
       if (this.timer) {
         clearTimeout(this.timer);
       }
       this.timer = setTimeout(() => {
+        this.setPlayingState(true);
         this.play();
       }, 1000);
     },
     playing(newPlaying) {
+      if (!this.songReady) {
+        return;
+      }
       this.$nextTick(() => {
-        newPlaying ? this.audio.play() : this.audio.pause();
+        newPlaying ? this.play() : this.pause();
       });
     },
   },
@@ -159,7 +179,12 @@ export default {
       const { durationSecond } = this.currentSong;
       return Math.min(this.currentTime / durationSecond, 1);
     },
-    ...mapState(["currentSong", "playing", "isPlaylistShow"]),
+    ...mapState([
+      "currentSong",
+      "playing",
+      "isPlaylistShow",
+      "isPlaylistPromptShow",
+    ]),
     ...mapGetters(["prevSong", "nextSong"]),
   },
 };

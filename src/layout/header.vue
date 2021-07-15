@@ -4,7 +4,10 @@
       <img class="logo" :src="logo" />
       <span>云音乐</span>
     </div>
-    <div>
+    <div class="right">
+      <div class="search-wrap">
+        <Search />
+      </div>
       <Theme />
     </div>
   </div>
@@ -13,12 +16,13 @@
 <script type="text/ecmascript-6">
 import logo from "@/assets/logo.png";
 import Theme from "@/components/theme";
+import Search from "@/components/search";
 
 export default {
   data() {
     return {};
   },
-  components: { Theme },
+  components: { Theme, Search },
   methods: {
     onClickLogo() {
       this.$router.push("/discovery");
@@ -50,6 +54,13 @@ export default {
       width: 30px;
       height: 30px;
       margin-right: 8px;
+    }
+  }
+  .right {
+    display: flex;
+    align-items: center;
+    .search-wrap {
+      margin-right: 16px;
     }
   }
 }
