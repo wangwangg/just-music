@@ -49,6 +49,11 @@ export default {
       type: Array,
       default: () => [],
     },
+    // 播放歌曲是否弹出歌单提示
+    showPromptOnPlay: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -75,6 +80,7 @@ export default {
         {
           prop: "durationSecond",
           label: "时长",
+          width: "100",
         },
       ],
     };
@@ -82,7 +88,7 @@ export default {
   methods: {
     onRowClick(song) {
       this.startSong(song);
-      this.setPlaylist(this.songs);
+      this.setPlaylist({ data: this.songs, showPrompt: this.showPromptOnPlay });
     },
     isActiveSong(song) {
       return song.id === this.currentSong.id;

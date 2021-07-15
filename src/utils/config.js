@@ -3,3 +3,4 @@ export const playMode = {
   loop: 1,
   random: 2
 }
+export const HISTORY_KEY = '__history__'

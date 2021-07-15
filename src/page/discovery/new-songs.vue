@@ -7,7 +7,7 @@
         :key="listIndex"
         v-for="(list, listIndex) in thunkedList"
       >
-        <NewSongCard
+        <SongCard
           class="song-card"
           v-for="(item, index) in list"
           v-bind="nomalizeSong(item)"
@@ -19,14 +19,12 @@
     </div>
   </div>
 </template>
-
 <script>
 import { mapActions, mapMutations } from "vuex";
 import { getNewSongs } from "@/api/discovery";
 import Title from "@/base/title";
-import NewSongCard from "@/components/new-song-card";
+import SongCard from "@/components/song-card";
 import { createSong } from "@/utils/song";
-
 const songsLimit = 10;
 export default {
   async created() {
@@ -39,8 +37,6 @@ export default {
       list: [],
     };
   },
-  components: { Title, NewSongCard },
-
   methods: {
     getSongOrder(listIndex, index) {
       return listIndex * this.chunkLimit + index + 1;
@@ -55,18 +51,12 @@ export default {
           duration,
         },
       } = song;
-      return createSong({
-        id,
-        name,
-        img: blurPicUrl,
-        artists,
-        duration,
-      });
+      return createSong({ id, name, img: blurPicUrl, artists, duration });
     },
     onClickSong(song) {
       const nomalizedSong = this.nomalizeSong(song);
       this.startSong(nomalizedSong);
-      this.setPlaylist(this.normalizedSongs);
+      this.setPlaylist({ data: this.normalizedSongs });
     },
     ...mapMutations(["setPlaylist"]),
     ...mapActions(["startSong"]),
@@ -78,21 +68,25 @@ export default {
         this.list.slice(this.chunkLimit, this.list.length),
       ];
     },
+    normalizedSongs() {
+      return this.list.map((song) => this.nomalizeSong(song));
+    },
   },
-  normalizedSongs() {
-    return this.list.map((song) => this.nomalizeSong(song));
-  },
+  components: { Title, SongCard },
 };
 </script>
 
 <style lang="scss" scoped>
-.list {
-  flex: 1;
-}
-.song-card {
-  cursor: pointer;
-  &:hover {
-    background: var(--light-bgcolor);
+.list-wrap {
+  display: flex;
+  .list {
+    flex: 1;
+  }
+  .song-card {
+    cursor: pointer;
+    &:hover {
+      background: var(--light-bgcolor);
+    }
   }
 }
 </style>

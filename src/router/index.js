@@ -1,30 +1,32 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
 
 const Discovery = () => import('@/page/discovery')
-const SongListDetail = () => import('@/page/song-list-detail')
+const PlaylistDetail = () => import('@/page/playlist-detail')
+const Playlists = () => import('@/page/playlists')
 
-Vue.use(VueRouter)
+Vue.use(Router)
 
-const routes = [
-  {
-    path: '/',
-    redirect: '/discovery',
-  },
-  {
-    path: '/discovery',
-    name: 'discovery',
-    component: Discovery,
-  },
-  {
-    path: '/song-list-detail/:listId',
-    name: 'song-list-detail',
-    component: SongListDetail
-  }
-]
-
-const router = new VueRouter({
-  routes,
+export default new Router({
+  routes: [
+    {
+      path: '/',
+      redirect: '/discovery'
+    },
+    {
+      path: '/discovery',
+      name: 'discovery',
+      component: Discovery
+    },
+    {
+      path: '/playlist/:listId',
+      name: 'playlist',
+      component: PlaylistDetail
+    },
+    {
+      path: '/playlists',
+      name: 'playlists',
+      component: Playlists
+    }
+  ]
 })
-
-export default router
