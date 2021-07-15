@@ -2,7 +2,7 @@
   <div class="page">
     <div class="discovery-content">
       <Banner />
-      <Recommend />
+      <NewSongList />
       <NewSongs />
     </div>
   </div>
@@ -10,16 +10,16 @@
 
 <script type="text/ecmascript-6">
 import Banner from "./banner";
-import Recommend from "./recommend";
+import NewSongList from "./new-song-list";
 import NewSongs from "./new-songs";
 export default {
   data() {
     return {};
   },
   components: {
-    Recommend,
     NewSongs,
     Banner,
+    NewSongList,
   },
 };
 </script>

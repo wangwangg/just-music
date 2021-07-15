@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Discovery from '@/page/discovery'
+
+const Discovery = () => import('@/page/discovery')
+const SongListDetail = () => import('@/page/song-list-detail')
 
 Vue.use(VueRouter)
 
@@ -14,6 +16,11 @@ const routes = [
     name: 'discovery',
     component: Discovery,
   },
+  {
+    path: '/song-list-detail/:listId',
+    name: 'song-list-detail',
+    component: SongListDetail
+  }
 ]
 
 const router = new VueRouter({

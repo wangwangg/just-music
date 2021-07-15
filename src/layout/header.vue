@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="logo-wrap">
+    <div class="logo-wrap" @click="onClickLogo">
       <img class="logo" :src="logo" />
       <span>云音乐</span>
     </div>
@@ -8,16 +8,21 @@
 </template>
 
 <script type="text/ecmascript-6">
-import logo from '@/assets/logo.png'
+import logo from "@/assets/logo.png";
 
 export default {
-  data () {
-    return {}
+  data() {
+    return {};
   },
-  created () {
-    this.logo = logo
+  methods: {
+    onClickLogo() {
+      this.$router.push("/discovery");
+    },
   },
-}
+  created() {
+    this.logo = logo;
+  },
+};
 </script>
 
 <style lang='scss' scoped>
@@ -32,6 +37,8 @@ export default {
     align-items: center;
     font-size: $font-size-title;
     color: $white;
+    cursor: pointer;
+
     .logo {
       width: 30px;
       height: 30px;

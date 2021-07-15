@@ -8,8 +8,8 @@
 
 <script type="text/ecmascript-6">
 export default {
-  props: ['size', 'type']
-}
+  props: ["size", "type"],
+};
 </script>
 
 <style lang="scss" scoped>

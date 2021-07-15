@@ -1,5 +1,5 @@
 export function createSong(song) {
-  const { id, name, img, artists, duration } = song
+  const { id, name, img, artists, duration, ...rest } = song
 
   return {
     id,
@@ -9,6 +9,7 @@ export function createSong(song) {
     duration,
     artistsText: genArtistis(artists),
     durationSecond: duration / 1000,
+    ...rest
   }
 }
 

@@ -3,7 +3,7 @@
     <LayoutHeader />
 
     <div class="layout-body">
-      <LayoutMenu />
+      <!-- <LayoutMenu /> -->
       <div id="page-content" class="content">
         <router-view />
       </div>
