@@ -4,10 +4,8 @@
       <span class="order">0{{ order }}</span>
     </div>
     <div class="img-wrap">
-      <img :src="`${img}?param=120y120`" />
-      <div class="play-icon-wrap">
-        <Icon class="play-icon" type="play" />
-      </div>
+      <img :src="$utils.genImgUrl(img, 120)" />
+      <PlayIcon class="play-icon" />
     </div>
     <div class="song-content">
       <p class="song-name">{{ name }}</p>
@@ -17,24 +15,25 @@
 </template>
 
 <script>
+import PlayIcon from "@/base/play-icon";
 // 新歌页面组件
 export default {
   props: ["order", "name", "img", "artistsText"],
+  components: { PlayIcon },
 };
 </script>
+
 
 <style lang="scss" scoped>
 .song-card {
   display: flex;
   padding: 8px;
   font-size: $font-size-sm;
-
   .order-wrap {
     @include flex-center();
     width: 30px;
     margin-right: 8px;
   }
-
   .img-wrap {
     position: relative;
     width: 60px;
@@ -44,30 +43,19 @@ export default {
       width: 100%;
       height: 100%;
     }
+    .play-icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
-
   .song-content {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-
     .song-name {
       color: var(--font-color-white);
-    }
-
-    .play-icon-wrap {
-      @include flex-center();
-      position: absolute;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.5);
-      .play-icon {
-        color: $theme-color;
-      }
     }
   }
 }

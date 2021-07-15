@@ -1,7 +1,7 @@
 <template>
   <div class="header" v-if="playlist.id">
     <div class="img-wrap">
-      <img :src="playlist.coverImgUrl" />
+      <img :src="$utils.genImgUrl(playlist.coverImgUrl, 400)" />
     </div>
     <div class="content">
       <div class="title-wrap">

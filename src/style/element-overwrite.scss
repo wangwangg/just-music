@@ -75,3 +75,13 @@ $input-height: 24px;
     }
   }
 }
+
+// pagination
+.el-pagination, .el-pagination button, .el-pager li {
+  background: var(--body-bgcolor) !important;
+  color: var(--font-color) !important;
+
+  .active {
+    color: $theme-color !important;
+  }
+}

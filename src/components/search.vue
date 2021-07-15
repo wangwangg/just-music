@@ -79,10 +79,11 @@ import { getSearchHot, getSearchSuggest } from "@/api/search";
 import { createSong, genArtistisText } from "@/utils/song";
 import { debounce } from "@/utils/common";
 export default {
-  created() {
-    getSearchHot().then(({ result: { hots } }) => {
-      this.searchHots = hots;
-    });
+  async created() {
+    const {
+      result: { hots },
+    } = await getSearchHot();
+    this.searchHots = hots;
   },
   mounted() {
     this.reserveDoms = [this.$refs.input.$el];
