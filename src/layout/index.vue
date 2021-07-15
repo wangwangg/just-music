@@ -12,15 +12,15 @@
 </template>
 
 <script>
-import LayoutHeader from './header'
-import LayoutMenu from './menu'
+import LayoutHeader from "./header";
+import LayoutMenu from "./menu";
 
 export default {
-  data () {
+  data() {
     return {};
   },
-  components: { LayoutHeader, LayoutMenu }
-}
+  components: { LayoutHeader, LayoutMenu },
+};
 </script>
 
 <style lang='scss' scoped>
@@ -34,7 +34,8 @@ export default {
     .content {
       flex: 1;
       overflow-y: auto;
-      padding-bottom: 32px + $mini-player-height;
+      margin-bottom: $mini-player-height;
+      padding-bottom: 32px;
     }
   }
 }

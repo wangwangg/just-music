@@ -20,7 +20,6 @@
 // 新歌页面组件
 export default {
   props: ["order", "name", "img", "artistsText"],
-
 };
 </script>
 
@@ -31,9 +30,7 @@ export default {
   font-size: $font-size-sm;
 
   .order-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include flex-center();
     width: 30px;
     margin-right: 8px;
   }
@@ -66,9 +63,7 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      @include flex-center();
       background: rgba(255, 255, 255, 0.5);
       .play-icon {
         color: $theme-color;

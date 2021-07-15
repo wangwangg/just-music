@@ -17,71 +17,76 @@
 
 <script type="text/ecmascript-6">
 //进度条组件
-import { prefixStyle } from '@/utils/dom'
-const progressBtnWidth = 16
-const transform = prefixStyle('transform')
+import { prefixStyle } from "@/utils/dom";
+const progressBtnWidth = 16;
+const transform = prefixStyle("transform");
 export default {
   props: {
     percent: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
-  created () {
-    this.touch = {}
+  created() {
+    this.touch = {};
   },
   methods: {
-    progressTouchStart (e) {
-      this.touch.initiated = true
-      this.touch.startX = e.touches[0].pageX
-      this.touch.left = this.$refs.progress.clientWidth
+    progressTouchStart(e) {
+      this.touch.initiated = true;
+      this.touch.startX = e.touches[0].pageX;
+      this.touch.left = this.$refs.progress.clientWidth;
     },
-    progressTouchMove (e) {
+    progressTouchMove(e) {
       if (!this.touch.initiated) {
-        return
+        return;
       }
-      const deltaX = e.touches[0].pageX - this.touch.startX
-      const offsetWidth = Math.min(this.$refs.progressBar.clientWidth - progressBtnWidth, Math.max(0, this.touch.left + deltaX))
-      this._offset(offsetWidth)
-      this.$emit('percentChanging', this._getPercent())
+      const deltaX = e.touches[0].pageX - this.touch.startX;
+      const offsetWidth = Math.min(
+        this.$refs.progressBar.clientWidth - progressBtnWidth,
+        Math.max(0, this.touch.left + deltaX)
+      );
+      this._offset(offsetWidth);
+      this.$emit("percentChanging", this._getPercent());
     },
-    progressTouchEnd () {
-      this.touch.initiated = false
-      this._triggerPercent()
+    progressTouchEnd() {
+      this.touch.initiated = false;
+      this._triggerPercent();
     },
-    progressClick (e) {
-      const rect = this.$refs.progressBar.getBoundingClientRect()
-      const offsetWidth = e.pageX - rect.left
-      this._offset(offsetWidth)
+    progressClick(e) {
+      const rect = this.$refs.progressBar.getBoundingClientRect();
+      const offsetWidth = e.pageX - rect.left;
+      this._offset(offsetWidth);
       // 这里当我们点击 progressBtn 的时候，e.offsetX 获取不对
       // this._offset(e.offsetX)
-      this._triggerPercent()
+      this._triggerPercent();
     },
-    setProgressOffset (percent) {
+    setProgressOffset(percent) {
       if (percent >= 0 && !this.touch.initiated) {
-        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-        const offsetWidth = percent * barWidth
-        this._offset(offsetWidth)
+        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
+        const offsetWidth = percent * barWidth;
+        this._offset(offsetWidth);
       }
     },
-    _triggerPercent () {
-      this.$emit('percentChange', this._getPercent())
+    _triggerPercent() {
+      this.$emit("percentChange", this._getPercent());
     },
-    _offset (offsetWidth) {
-      this.$refs.progress.style.width = `${offsetWidth}px`
-      this.$refs.progressBtn.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+    _offset(offsetWidth) {
+      this.$refs.progress.style.width = `${offsetWidth}px`;
+      this.$refs.progressBtn.style[
+        transform
+      ] = `translate3d(${offsetWidth}px,0,0)`;
     },
-    _getPercent () {
-      const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
-      return this.$refs.progress.clientWidth / barWidth
-    }
+    _getPercent() {
+      const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth;
+      return this.$refs.progress.clientWidth / barWidth;
+    },
   },
   watch: {
-    percent (newPercent) {
-      this.setProgressOffset(newPercent)
-    }
-  }
-}
+    percent(newPercent) {
+      this.setProgressOffset(newPercent);
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -116,10 +121,10 @@ export default {
         background: $theme-color;
       }
     }
-    &:hover {
-      .progress-btn {
-        display: block !important;
-      }
+  }
+  &:hover {
+    .progress-btn {
+      display: block !important;
     }
   }
 }

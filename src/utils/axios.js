@@ -16,6 +16,7 @@ export default {
       loading ||
         (loading = Loading.service({
           target: '#page-content',
+          background: 'transparent',
           text: '载入中',
         }))
       loadingCount++

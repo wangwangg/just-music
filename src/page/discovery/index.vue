@@ -1,6 +1,7 @@
 <template>
   <div class="page">
     <div class="discovery-content">
+      <Banner />
       <Recommend />
       <NewSongs />
     </div>
@@ -8,17 +9,19 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Recommend from './recommend'
-import NewSongs from './new-songs'
+import Banner from "./banner";
+import Recommend from "./recommend";
+import NewSongs from "./new-songs";
 export default {
-  data () {
-    return {
-    }
+  data() {
+    return {};
   },
   components: {
-    Recommend, NewSongs
-  }
-}
+    Recommend,
+    NewSongs,
+    Banner,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
