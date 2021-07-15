@@ -1,7 +1,8 @@
 import { getSongUrl } from '@/api/song'
 
 export default {
-  async getCurrentSong({ commit }, song) {
+  // 整合歌曲信息 并且开始播放
+  async startSong({ commit }, song) {
     const { data } = await getSongUrl(song.id)
     const [resultSong] = data
     commit('setCurrentSong', {

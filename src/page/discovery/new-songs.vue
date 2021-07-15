@@ -10,9 +10,9 @@
         <NewSongCard
           class="song-card"
           v-for="(item, index) in list"
+          v-bind="nomalizeSong(item)"
           :order="getSongOrder(listIndex, index)"
           :key="item.id"
-          v-bind="nomalizeSong(item)"
           @click.native="onClickSong(item)"
         />
       </div>
@@ -21,64 +21,61 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
+import { getNewSongs } from "@/api/discovery";
 import Title from "@/base/title";
 import NewSongCard from "@/components/new-song-card";
-import { createSong } from '@/utils/song'
+import { createSong } from "@/utils/song";
 
 const songsLimit = 10;
 export default {
-  async created () {
-    const { result } = await this.$request(
-      `/personalized/newsong`
-    );
+  async created() {
+    const { result } = await getNewSongs();
     this.list = result;
   },
-  data () {
+  data() {
     return {
       chunkLimit: Math.ceil(songsLimit / 2),
-      list: []
+      list: [],
     };
   },
   components: { Title, NewSongCard },
 
   methods: {
-    getSongOrder (listIndex, index) {
+    getSongOrder(listIndex, index) {
       return listIndex * this.chunkLimit + index + 1;
     },
-    nomalizeSong (song) {
+    nomalizeSong(song) {
       const {
         id,
         name,
         song: {
           artists,
-          album: {
-            blurPicUrl,
-          },
-          duration
-        }
-      } = song
+          album: { blurPicUrl },
+          duration,
+        },
+      } = song;
       return createSong({
         id,
         name,
         img: blurPicUrl,
         artists,
-        duration
-      })
+        duration,
+      });
     },
-    onClickSong (song) {
-      const nomalizedSong = this.nomalizeSong(song)
-      this.getCurrentSong(nomalizedSong)
+    onClickSong(song) {
+      const nomalizedSong = this.nomalizeSong(song);
+      this.startSong(nomalizedSong);
     },
-    ...mapActions(['getCurrentSong'])
+    ...mapActions(["startSong"]),
   },
   computed: {
-    thunkedList () {
+    thunkedList() {
       return [
         this.list.slice(0, this.chunkLimit),
-        this.list.slice(this.chunkLimit, this.list.length)
+        this.list.slice(this.chunkLimit, this.list.length),
       ];
-    }
+    },
   },
 };
 </script>

@@ -56,6 +56,7 @@ export default {
     }
 
     .play-icon-wrap {
+      @include flex-center();
       position: absolute;
       width: 24px;
       height: 24px;
@@ -63,7 +64,6 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      @include flex-center();
       background: rgba(255, 255, 255, 0.5);
       .play-icon {
         color: $theme-color;
