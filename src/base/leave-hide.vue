@@ -7,6 +7,7 @@
 <script type="text/ecmascript-6">
 import { hasParent } from "@/utils/dom";
 export default {
+  name: "LeaveHide",
   props: {
     show: {
       type: Boolean,

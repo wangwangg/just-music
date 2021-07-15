@@ -7,12 +7,10 @@
 
 <script type="text/ecmascript-6">
 export default {
-  data () {
-    return {
-    }
+  data() {
+    return {}
   },
-  components: {
-  }
+  components: {}
 }
 </script>
 
@@ -23,12 +21,15 @@ export default {
   padding: 16px;
   padding-bottom: 0;
   margin-bottom: 12px;
+
   .user-icon {
     font-size: 24px;
   }
+
   .user-name {
     margin-left: 8px;
     font-size: $font-size-lg;
   }
 }
 </style>
+

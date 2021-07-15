@@ -31,9 +31,11 @@ export default {
   //button
   ['--button-border-color']: '#454545',
   ['--button-hover-bgcolor']: '#3E3E3E',
-
   //tab
   ['--tab-item-color']: '#797979',
   ['--tab-item-hover-color']: '#B4B4B4',
   ['--tab-item-active-color']: '#fff',
+
+  //song-detail
+  ['--song-shallow-grey-bg']: '#2A2A2A',
 }

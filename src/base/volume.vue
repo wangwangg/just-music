@@ -21,6 +21,7 @@ import ProgressBar from "@/base/progress-bar";
 import Icon from "@/base/icon";
 
 export default {
+  name: "Volume",
   data() {
     return {
       volumePercent: 1,

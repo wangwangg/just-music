@@ -6,6 +6,7 @@
 
 <script type="text/ecmascript-6">
 export default {
+  name: "NButton",
   methods: {
     onClick(e) {
       this.$emit("click", e);

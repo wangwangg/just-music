@@ -14,6 +14,7 @@
 import { prefixStyle } from "@/utils/dom";
 const transform = prefixStyle("transform");
 export default {
+  name: "ProgressBar",  
   props: {
     percent: {
       type: Number,

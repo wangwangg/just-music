@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Layout />
+    <Player />
     <Miniplayer />
     <Playlist />
   </div>
@@ -10,8 +11,10 @@
 import Layout from "@/layout";
 import Miniplayer from "@/components/mini-player";
 import Playlist from "@/components/playlist";
+import Player from "@/components/player";
+
 export default {
-  components: { Layout, Miniplayer, Playlist },
+  components: { Layout, Miniplayer, Playlist, Player },
 };
 </script>
 

@@ -6,17 +6,18 @@
 
 <script>
 export default {
+  name: "StripedList",
   props: {
     source: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
-  mounted () {
+  mounted() {
     this.mixinStriped();
   },
   methods: {
-    mixinStriped () {
+    mixinStriped() {
       if (this.$slots.default && this.$slots.default.length) {
         this.$nextTick(() => {
           this.$slots.default.forEach((vnode, index) => {
@@ -26,16 +27,16 @@ export default {
           });
         });
       }
-    }
+    },
   },
   watch: {
     source: {
-      handler () {
+      handler() {
         this.mixinStriped();
       },
-      deep: true
-    }
-  }
+      deep: true,
+    },
+  },
 };
 </script>
 
@@ -47,6 +48,6 @@ export default {
   background: #2e2e2e;
 }
 .stripe-deep {
-  background: $body-bgcolor;
+  background: var(--body-bgcolor);
 }
 </style>
