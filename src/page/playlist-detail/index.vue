@@ -11,6 +11,7 @@ import SongTable from "@/components/song-table";
 import { createSong } from "@/utils/song";
 import { getListDetail } from "@/api/song-list";
 import { getSongDetail } from "@/api/song";
+const MAX = 500;
 export default {
   async created() {
     this.init();
@@ -31,7 +32,7 @@ export default {
     },
     async genSonglist(playlist) {
       const trackIds = playlist.trackIds.map(({ id }) => id);
-      const songDetails = await getSongDetail(trackIds);
+      const songDetails = await getSongDetail(trackIds.slice(0, MAX));
       const songs = songDetails.songs.map(({ id, name, al, ar, dt }) =>
         createSong({
           id,

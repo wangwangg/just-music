@@ -14,13 +14,13 @@
       </div>
       <div class="action-wrap"></div>
       <div class="desc-wrap">
-        <p class="desc">
+        <p class="desc" v-if="tagsText">
           <span class="label"> 标签: </span>
           <span>
             {{ tagsText }}
           </span>
         </p>
-        <p class="desc">
+        <p class="desc" v-if="playlist.description">
           <span class="label"> 简介: </span>
           <span>
             {{ playlist.description }}

@@ -1,19 +1,13 @@
 <template >
   <transition name="slide">
-    <div
-      v-if="isPlayerShow"
-      class="player"
-    >
+    <div v-if="isPlayerShow" class="player">
       <div class="content">
         <div class="song">
           <div class="left">
-            <div
-              ref="disc"
-              class="img-outer-border"
-            >
+            <div ref="disc" class="img-outer-border">
               <div
                 ref="discRotate"
-                :class="{rotate: playing}"
+                :class="{ rotate: playing }"
                 class="img-outer"
               >
                 <div class="img-wrap">
@@ -24,33 +18,27 @@
           </div>
           <div class="right">
             <p class="name">
-              {{currentSong.name}}
+              {{ currentSong.name }}
             </p>
             <div class="desc">
               <div class="desc-item">
                 <span class="label">歌手：</span>
-                <div class="value">{{currentSong.artistsText}}</div>
+                <div class="value">{{ currentSong.artistsText }}</div>
               </div>
             </div>
-            <div
-              class="no-lyric"
-              v-if="!rawLyric"
-            >
-              还没有歌词哦~
-            </div>
+            <div class="no-lyric" v-if="!rawLyric">还没有歌词哦~</div>
             <Scroller
               v-else
               ref="scroller"
               class="lyric-wrap"
               :data="lyric"
               @init="onInitScroller"
-              :options="{disableTouch: true}"
+              :options="{ disableTouch: true }"
             >
-
               <div>
                 <div
                   :key="index"
-                  v-for="(l,index) in lyricWithTranslation"
+                  v-for="(l, index) in lyricWithTranslation"
                   class="lyric-item"
                   :class="getActiveCls(index)"
                   ref="lyric"
@@ -60,7 +48,7 @@
                     v-for="(content, contentIndex) in l.contents"
                     class="lyric-text"
                   >
-                    {{content}}
+                    {{ content }}
                   </p>
                 </div>
               </div>
@@ -77,73 +65,72 @@
       </div>
     </div>
   </transition>
-
 </template>
 
 <script type="text/ecmascript-6">
-import { getLyric } from '@/api/song'
-import lyricParser from '@/utils/lrcparse'
-import { prefixStyle } from "@/utils/dom"
+import { getLyric } from "@/api/song";
+import lyricParser from "@/utils/lrcparse";
+import { prefixStyle } from "@/utils/dom";
 
-import Comments from '@/components/comments'
-import { mapState, mapMutations } from 'vuex'
+import Comments from "@/components/comments";
+import { mapState, mapMutations } from "vuex";
 
-const WHEEL_TYPE = 'wheel'
-const SCROLL_TYPE = 'scroll'
-const transform = prefixStyle("transform")
+const WHEEL_TYPE = "wheel";
+const SCROLL_TYPE = "scroll";
+const transform = prefixStyle("transform");
 export default {
   created() {
     this.lyricScroll = {
       [WHEEL_TYPE]: false,
-      [SCROLL_TYPE]: false
-    }
+      [SCROLL_TYPE]: false,
+    };
     this.lyricTimer = {
       [WHEEL_TYPE]: null,
-      [SCROLL_TYPE]: null
-    }
+      [SCROLL_TYPE]: null,
+    };
   },
   data() {
     return {
-      rawLyric: '',
+      rawLyric: "",
       lyric: [],
-      tlyric: []
-    }
+      tlyric: [],
+    };
   },
   methods: {
     async updateLyric() {
-      const lrc = await getLyric(this.currentSong.id)
-      const { lyric, tlyric } = lyricParser(lrc)
-      this.rawLyric = lrc.lrc.lyric
-      this.lyric = lyric
-      this.tlyric = tlyric
+      const lrc = await getLyric(this.currentSong.id);
+      const { lyric, tlyric } = lyricParser(lrc);
+      this.rawLyric = lrc.lrc.lyric;
+      this.lyric = lyric;
+      this.tlyric = tlyric;
     },
     getActiveCls(index) {
-      return this.activeLyricIndex === index ? 'active' : ''
+      return this.activeLyricIndex === index ? "active" : "";
     },
     onInitScroller(scoller) {
       const onScrollStart = (type) => {
-        this.clearTimer(type)
-        this.lyricScroll[type] = true
-      }
+        this.clearTimer(type);
+        this.lyricScroll[type] = true;
+      };
       const onScrollEnd = (type) => {
         // 滚动结束后两秒 歌词开始自动滚动
-        this.clearTimer(type)
+        this.clearTimer(type);
         this.lyricTimer[type] = setTimeout(() => {
-          this.lyricScroll[type] = false
+          this.lyricScroll[type] = false;
         }, 2000);
-      }
-      scoller.on('scrollStart', onScrollStart.bind(null, SCROLL_TYPE))
-      scoller.on('mousewheelStart', onScrollStart.bind(null, WHEEL_TYPE))
+      };
+      scoller.on("scrollStart", onScrollStart.bind(null, SCROLL_TYPE));
+      scoller.on("mousewheelStart", onScrollStart.bind(null, WHEEL_TYPE));
 
-      scoller.on('scrollEnd', onScrollEnd.bind(null, SCROLL_TYPE))
-      scoller.on('mousewheelEnd', onScrollEnd.bind(null, WHEEL_TYPE))
+      scoller.on("scrollEnd", onScrollEnd.bind(null, SCROLL_TYPE));
+      scoller.on("mousewheelEnd", onScrollEnd.bind(null, WHEEL_TYPE));
     },
     clearTimer(type) {
-      this.lyricTimer[type] && clearTimeout(this.lyricTimer[type])
+      this.lyricTimer[type] && clearTimeout(this.lyricTimer[type]);
     },
     onCommentPageChange(page) {
       if (page > 1) {
-        this.$refs.comments.$el.scrollIntoView({ behavior: "smooth" })
+        this.$refs.comments.$el.scrollIntoView({ behavior: "smooth" });
       }
     },
     /**
@@ -153,74 +140,77 @@ export default {
      */
     syncWrapperTransform(wrapper, inner) {
       if (!this.$refs[wrapper]) {
-        return
+        return;
       }
-      let imageWrapper = this.$refs[wrapper]
-      let image = this.$refs[inner]
-      let wTransform = getComputedStyle(imageWrapper)[transform]
-      let iTransform = getComputedStyle(image)[transform]
-      imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
+      let imageWrapper = this.$refs[wrapper];
+      let image = this.$refs[inner];
+      let wTransform = getComputedStyle(imageWrapper)[transform];
+      let iTransform = getComputedStyle(image)[transform];
+      imageWrapper.style[transform] =
+        wTransform === "none" ? iTransform : iTransform.concat(" ", wTransform);
     },
-    ...mapMutations(['setPlayerShow'])
+    ...mapMutations(["setPlayerShow"]),
   },
   computed: {
     activeLyricIndex() {
       return this.lyricWithTranslation
         ? this.lyricWithTranslation.findIndex((l, index) => {
-          const nextLyric = this.lyricWithTranslation[index + 1]
-          return (
-            this.currentTime >= l.time &&
-            (
-              nextLyric ? this.currentTime < nextLyric.time : true
-            )
-          )
-        })
-        : -1
+            const nextLyric = this.lyricWithTranslation[index + 1];
+            return (
+              this.currentTime >= l.time &&
+              (nextLyric ? this.currentTime < nextLyric.time : true)
+            );
+          })
+        : -1;
     },
     lyricWithTranslation() {
-      let ret = []
+      let ret = [];
       // 空内容的去除
-      const lyricFiltered = this.lyric.filter(({ content }) => Boolean(content))
+      const lyricFiltered = this.lyric.filter(({ content }) =>
+        Boolean(content)
+      );
       // content统一转换数组形式
       if (lyricFiltered.length) {
         lyricFiltered.forEach((l) => {
-          const { time, content } = l
-          const lyricItem = { time, content, contents: [content] }
-          const sameTimeTLyric = this.tlyric.find(({ time: tLyricTime }) => tLyricTime === time)
+          const { time, content } = l;
+          const lyricItem = { time, content, contents: [content] };
+          const sameTimeTLyric = this.tlyric.find(
+            ({ time: tLyricTime }) => tLyricTime === time
+          );
           if (sameTimeTLyric) {
-            const { content: tLyricContent } = sameTimeTLyric
+            const { content: tLyricContent } = sameTimeTLyric;
             if (content) {
-              lyricItem.contents.push(tLyricContent)
+              lyricItem.contents.push(tLyricContent);
             }
           }
-          ret.push(lyricItem)
-        })
+          ret.push(lyricItem);
+        });
       } else {
         ret = lyricFiltered.map(({ time, content }) => ({
           time,
           content,
-          contents: [content]
-        }))
+          contents: [content],
+        }));
       }
-      return ret
+      return ret;
     },
-    ...mapState(['currentSong', "currentTime", "playing", "isPlayerShow"])
+    ...mapState(["currentSong", "currentTime", "playing", "isPlayerShow"]),
   },
   watch: {
     playing(newPlaying) {
       if (!newPlaying) {
-        this.syncWrapperTransform('disc', 'discRotate')
+        this.syncWrapperTransform("disc", "discRotate");
       }
     },
     currentSong(newSong, oldSong) {
       if (!newSong.id) {
-        this.setPlayerShow(false)
-        return
+        this.setPlayerShow(false);
+        return;
       }
       if (newSong.id === oldSong.id) {
-        return
+        return;
       }
-      this.updateLyric()
+      this.updateLyric();
     },
     activeLyricIndex(newIndex, oldIndex) {
       if (
@@ -229,17 +219,20 @@ export default {
         !this.lyricScroll[WHEEL_TYPE] &&
         !this.lyricScroll[SCROLL_TYPE]
       ) {
-        const { scroller, lyric } = this.$refs
+        const { scroller, lyric } = this.$refs;
         if (lyric && lyric[newIndex]) {
-          scroller.getScroller().scrollToElement(lyric[newIndex], 200, 0, true)
+          scroller.getScroller().scrollToElement(lyric[newIndex], 200, 0, true);
         }
       }
-    }
+    },
+    $route() {
+      this.setPlayerShow(false);
+    },
   },
   components: {
-    Comments
+    Comments,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

@@ -25,8 +25,7 @@ export default {
       return config
     })
 
-    request.interceptors.response.use((response) => {
-      //响应了拦截器（在响应之后对数据进行一些处理）
+    const handleLoading = () => {
       loadingCount--
       // console.log(loadingCount, 'loadingCountloadingCount----')
 
@@ -34,9 +33,23 @@ export default {
         loading.close()
         loading = null
       }
+    }
+
+    const handleError = (e) => {
+      console.error(`请求错误:${e}`)
+    }
+
+    request.interceptors.response.use(response => {
+      //响应了拦截器（在响应之后对数据进行一些处理）
+      handleLoading()
       if (response.status === 200) {
         return response.data
       }
+      else {
+        handleError()
+      }
+    }, (e) => {
+      handleError(e)
     })
 
     Vue.prototype.$request = request
