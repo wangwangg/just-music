@@ -71,7 +71,7 @@ export default {
       margin-bottom: 12px;
       .title {
         font-size: $font-size-lg;
-        color: $white;
+        color: var(--font-color-white);
       }
     }
     .creator-wrap {

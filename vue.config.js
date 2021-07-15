@@ -20,7 +20,7 @@ module.exports = {
       sass: {
         data: `
         @import "~@/style/variables.scss";
-        @import "~@/style/_mixin.scss";
+        @import "~@/style/mixin.scss";
         `,
       },
     },

@@ -18,6 +18,8 @@
 
 <script type="text/ecmascript-6">
 import ProgressBar from "@/base/progress-bar";
+import Icon from "@/base/icon";
+
 export default {
   data() {
     return {
@@ -56,6 +58,7 @@ export default {
   },
   components: {
     ProgressBar,
+    Icon,
   },
 };
 </script>
@@ -67,7 +70,7 @@ export default {
   width: 150px;
   padding: 0 16px;
   .icon {
-    color: $font-color;
+    color: var(--font-color);
     cursor: pointer;
     margin-right: 8px;
   }

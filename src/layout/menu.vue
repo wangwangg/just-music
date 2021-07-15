@@ -19,33 +19,33 @@
 </template>
 
 <script>
-import User from '../components/user'
+import User from "../components/user";
 
 export default {
-  data () {
+  data() {
     return {
       menus: [
         {
           title: "发现音乐",
           icon: "icon-yinyue",
-          to: "/discovery"
+          to: "/discovery",
         },
         {
           title: "私人FM",
-          to: "/fm"
-        }
-      ]
-    }
+          to: "/fm",
+        },
+      ],
+    };
   },
-  components: { User }
-}
+  components: { User },
+};
 </script>
 
 <style lang='scss' scoped>
 .menu {
   width: 300px;
   height: 100%;
-  background-color: $menu-bgcolor;
+  background-color: var(--menu-bgcolor);
 }
 
 .menu-item {
@@ -53,12 +53,12 @@ export default {
   cursor: pointer; //鼠标移上去展示为小手
 
   &:hover {
-    background: $menu-item-hover-bg;
+    background: var(--menu-item-hover-bg);
   }
 
   &-active {
     color: $theme-color;
-    background: $menu-item-active-bg;
+    background: var(--menu-item-active-bg);
   }
 }
 </style>

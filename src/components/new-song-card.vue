@@ -52,7 +52,7 @@ export default {
     justify-content: space-around;
 
     .song-name {
-      color: $font-color-white;
+      color: var(--font-color-white);
     }
 
     .play-icon-wrap {

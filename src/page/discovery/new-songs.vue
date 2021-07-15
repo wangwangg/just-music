@@ -92,7 +92,7 @@ export default {
 .song-card {
   cursor: pointer;
   &:hover {
-    background: $light-bgcolor;
+    background: var(--light-bgcolor);
   }
 }
 </style>
