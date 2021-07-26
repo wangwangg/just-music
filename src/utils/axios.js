@@ -1,14 +1,41 @@
 import axios from 'axios'
 import { Loading } from 'element-ui'
 
+const BASE_URL = '/netease-api'
 let loading
 let loadingCount = 0
 export let request
+export let requestWithoutLoading
+
+const handleError = (e) => {
+  throw new Error(e)
+}
+
+const handleResponse = (response) => {
+  if (response.status === 200) {
+    return response.data
+  }
+  else {
+    handleError()
+  }
+}
+
 export default {
   install(Vue) {
+    //没有loading
+    requestWithoutLoading = axios.create({
+      // 创建一个axios实例
+      baseURL: BASE_URL
+    })
+
+    //请求拦截
+    requestWithoutLoading.interceptors.response.use(handleResponse, handleError)
+
+
+    //有loading
     request = axios.create({
       // 创建一个axios实例
-      baseURL: '/netease-api'
+      baseURL: BASE_URL
     })
 
     request.interceptors.request.use((config) => {
@@ -35,20 +62,13 @@ export default {
       }
     }
 
-    const handleError = (e) => {
-      console.error(`请求错误:${e}`)
-    }
 
     request.interceptors.response.use(response => {
       //响应了拦截器（在响应之后对数据进行一些处理）
       handleLoading()
-      if (response.status === 200) {
-        return response.data
-      }
-      else {
-        handleError()
-      }
+      return handleResponse(response)
     }, (e) => {
+      handleLoading()
       handleError(e)
     })
 

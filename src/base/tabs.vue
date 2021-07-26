@@ -114,7 +114,7 @@ export default {
 .tab-wrap {
   // padding: 12px;
   display: flex;
-  flex-wrap: wrap;
+  // flex-wrap: wrap;
 
   &.center {
     justify-content: center;
@@ -127,6 +127,7 @@ export default {
     padding: 12px;
     color: var(--tab-item-color);
     font-size: $font-size-medium;
+    white-space: nowrap;
     cursor: pointer;
     &.active {
       color: var(--tab-item-active-color);

@@ -1,5 +1,18 @@
-import { Input, Carousel, CarouselItem, Table, TableColumn, Popover, Pagination } from 'element-ui'
+import { Input, Loading, Carousel, CarouselItem, Table, TableColumn, Popover, Pagination } from 'element-ui'
 import * as commonUtils from './common'
+
+// 全局图片错误处理
+window.addEventListener('error', function (e) {
+  const target = e.target // 当前dom节点
+
+  if (target) {
+    const { tagName } = target
+    if (tagName && tagName.toUpperCase() === 'IMG') {
+      target.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+    }
+  }
+
+}, true)
 
 // import Icon from '@/base/icon'
 // import NButton from '@/base/button'
@@ -13,7 +26,7 @@ export default {
     // 批量注册base组件
     requireComponent.keys().forEach(fileName => {
       const componentConfig = requireComponent(fileName)
-      const componentName = componentConfig.default.name
+      const componentName = componentConfig.default.name || ''
       Vue.component(componentName, componentConfig.default || componentConfig)
     })
 
@@ -26,5 +39,6 @@ export default {
     Vue.use(TableColumn)
     Vue.use(Popover)
     Vue.use(Pagination)
+    Vue.use(Loading)
   }
 }

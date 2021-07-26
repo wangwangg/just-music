@@ -1,98 +1,105 @@
 <template>
   <div class="comment">
-    <div
-      class="block"
-      v-if="hotComments.length"
-    >
-      <p class="title">
-        精彩评论
-      </p>
-      <Comment
-        :key="comment.id"
-        :comment="comment"
-        :border="!$utils.isLast(index, hotComments)"
-        v-for="(comment, index) in hotComments"
-      />
-    </div>
-    <div
-      class="block"
-      v-if="comments.length"
-    >
-      <p class="title">
-        最新评论
-      </p>
-      <Comment
-        :key="comment.id"
-        :comment="comment"
-        :border="!$utils.isLast(index, comments)"
-        v-for="(comment,index) in comments"
-      />
-    </div>
-    <div
-      v-if="comments.length"
-      class="pagination"
-    >
-      <el-pagination
-        layout="prev, pager, next"
-        :page-size="PAGE_SIZE"
-        :total="total"
-        :current-page.sync="currentPage"
-        @current-change="onPageChange"
-      />
-    </div>
+    <template v-if="loading">
+      <Loading :loading="loading" />
+    </template>
+    <template v-else>
+      <div class="block" v-if="hotComments.length">
+        <p class="title">精彩评论</p>
+        <Comment
+          :key="comment.id"
+          :comment="comment"
+          :border="!$utils.isLast(index, hotComments)"
+          v-for="(comment, index) in hotComments"
+        />
+      </div>
+      <div class="block" v-if="comments.length">
+        <p class="title">
+          最新评论 <span class="count">({{ total }})</span>
+        </p>
+        <Comment
+          :key="comment.id"
+          :comment="comment"
+          :border="!$utils.isLast(index, comments)"
+          v-for="(comment, index) in comments"
+        />
+      </div>
+      <div v-if="comments.length" class="pagination">
+        <el-pagination
+          layout="prev, pager, next"
+          :page-size="PAGE_SIZE"
+          :total="total"
+          :current-page.sync="currentPage"
+          @current-change="onPageChange"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import { getSongComment } from '@/api/comment'
-import Comment from './comment'
+import { getSongComment } from "@/api/comment";
+import Comment from "./comment";
 
-const PAGE_SIZE = 20
+const PAGE_SIZE = 20;
 export default {
-  props: ['id'],
+  props: ["id"],
   created() {
-    this.PAGE_SIZE = PAGE_SIZE
+    this.PAGE_SIZE = PAGE_SIZE;
   },
   data() {
     return {
+      loading: false,
       hotComments: [],
       comments: [],
       total: 0,
       currentPage: 1,
-    }
+    };
   },
   methods: {
     async getComment() {
-      const { hotComments = [], comments = [], total } = await getSongComment({
-        id: this.id,
-        pageSize: PAGE_SIZE,
-        offset: (this.currentPage - 1) * PAGE_SIZE
-      })
-      this.hotComments = hotComments
-      this.comments = comments
-      this.total = total
+      this.loading = true;
+      const {
+        hotComments = [],
+        comments = [],
+        total,
+      } = await getSongComment(
+        {
+          id: this.id,
+          pageSize: PAGE_SIZE,
+          offset: (this.currentPage - 1) * PAGE_SIZE,
+        },
+        {
+          showLoading: false,
+        }
+      ).finally(() => {
+        this.loading = false;
+      });
+      this.hotComments = hotComments;
+      this.comments = comments;
+      this.total = total;
     },
     async onPageChange(page) {
-      await this.getComment()
+      await this.getComment();
       this.$nextTick(() => {
-        this.$emit('pageChange', page)
-      })
-    }
+        this.$emit("pageChange", page);
+      });
+    },
   },
   watch: {
     id: {
       handler(newId) {
         if (newId) {
-          this.getComment()
+          this.getComment();
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   components: {
-    Comment
-  }
-}
+    Comment,
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -100,8 +107,13 @@ export default {
   margin-bottom: 48px;
 
   .title {
+    font-size: $font-size-lg;
     font-weight: $font-weight-bold;
     margin-bottom: 4px;
+
+    .count {
+      font-size: $font-size;
+    }
   }
 }
 

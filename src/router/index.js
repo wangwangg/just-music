@@ -30,7 +30,7 @@ export default new Router({
       redirect: '/discovery'
     },
     {
-      path: '/playlist/:listId',
+      path: '/playlist/:id',
       name: 'playlist',
       component: PlaylistDetail
     },

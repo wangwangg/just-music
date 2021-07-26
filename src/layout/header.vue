@@ -81,12 +81,17 @@ export default {
       margin-right: 36px;
       font-size: $font-size-title;
       color: var(--font-color-white);
+      white-space: nowrap;
       cursor: pointer;
       .logo {
         width: 30px;
         height: 30px;
         margin-right: 8px;
       }
+    }
+
+    .font-weight {
+      white-space: nowrap;
     }
   }
   .right {
